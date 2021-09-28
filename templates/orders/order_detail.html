@@ -1,0 +1,138 @@
+{% extends 'orders/base_orders.html' %}
+
+{% block title %}
+Заказ #{{ order.id }} - {{block.super}}
+{% endblock %}
+
+{% block content %}
+<div class="container-my">
+  <div class="row mt-5">
+    <div class="col-3">
+      <h2>Заказ #{{ order.id }}</h2>
+      <h5><span class="badge badge-danger mb-2">{{ client.get_label_display }}</span></h5>
+      <ul class="list-group mb-3">
+        <li class="list-group-item bg-light">
+          <h6><b>Информация о заказе</b></h6>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Дата создания
+          <span>{{ order.date_create|date:'d/m/Y' }} в {{ order.date_create|date:'H:i' }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Дата выполнения
+          <span>
+            {% if order.date_end %}
+            {{ order.date_end|date:'d/m/Y' }} в {{ order.date_end|date:'H:i' }}
+          </span>
+          {% else %}
+          -
+          {% endif %}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Менеджер
+          <span>{{ order.worker }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <b>Сумма</b>
+          <span class="badge badge-success badge-pill">{{ order.summa }} руб.</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <b>Оплачено</b>
+          <span class="badge badge-success badge-pill">{{ order.deposit }} руб.</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <b>Долг</b>
+          <span class="badge badge-danger badge-pill">{{ order.debt }} руб.</span>
+        </li>
+      </ul>
+      <ul class="list-group">
+        <li class="list-group-item bg-light">
+          <h6><b>Информация о клиенте</b></h6>
+        </li>
+        <li class="list-group-item">
+          <a href="{{ order.client.get_absolute_url }}">
+            {{ order.client.last_name }} {{ order.client.first_name }} {{ order.client.fath_name }}
+          </a><br>
+          <span class="badge badge-danger mb-2">{{ order.client.get_label_display }}</span></li>
+        <li class="list-group-item">
+          <i class="fa fa-phone"></i>
+          +{{ order.client.phone }}
+        </li>
+      </ul>
+    </div>
+    <div class="col-9">
+      <div class="row mb-2">
+        <div class="col-8">
+          <form class="form-inline input-group-sm pb-2 my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
+            <button class="btn btn-sm btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+          </form>
+        </div>
+        <div class="col-4">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-sm"><i class="fa fa-rub"></i> Внести оплату</button>
+            <button type="button" class="btn btn-sm"><i class="fa fa-print"></i> Печать</button>
+            <button type="button" class="btn btn-sm"><i class="fa fa-plus-circle"></i> Добавить поицию</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr class="bg-light">
+              <th scope="col" style="width: 5%">#</th>
+              <th scope="col" style="width: 15%">Артикул детали</th>
+              <th scope="col">Наименование</th>
+              <th scope="col">Поставщик</th>
+              <th scope="col" style="width: 12%">Цена</th>
+              <th scope="col" style="width: 12%">Цена закупки</th>
+              <th scope="col">Статус</th>
+              <th scope="col" style="width: 9%"> </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in order.product.all %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ product.articul }}</td>
+              <td>{{ product.product_name }} <button data-toggle="popover" type="button" class="btn btn-sm" data-content="{{ product.info_car }}"><i class="fa fa-car"></i></button></td>
+              <td>{{ product.contractor.contractor_name }}</td>
+              <td><b>{{ product.price_sale }} р.</b></td>
+              <td>{{ product.price_purchase }} р.</td>
+              <td>
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ product.get_status_display }}
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for status in product.get_status_display.all %}
+                    <a class="dropdown-item" href="#">{{ status }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn btn-sm btn-secondary"><i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-sm btn-secondary"><i class="fa fa-trash"></i></button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block extrascripts %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('[data-toggle="popover"]').popover({
+    	trigger: 'hover',
+      placement: 'bottom'
+    });
+  });
+</script>
+{% endblock extrascripts %}
+
+{% endblock %}

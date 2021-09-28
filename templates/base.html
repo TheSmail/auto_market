@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}" />
+
+  <title>{% block title %}Система заказов{% endblock %}</title>
+
+  {% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/tablesort.css' %}">
+  <!-- Font awesome CSS -->
+  <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+  {% endblock stylesheets %}
+
+  <style>
+    html {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body {
+      margin-bottom: 4em;
+    }
+
+    .container-my {
+      max-width: 1460px;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    .footer {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4em;
+      line-height: 4em;
+      position: absolute;
+    }
+  </style>
+
+</head>
+
+<body>
+  <!-- Messages -->
+  <div>
+    {% if messages %}
+    {% for message in messages %}
+    <div style="border-radius:0;" {% if message.tags %} class="alert alert-icon alert-{{ message.tags }} alert-dismissible fade show mb-0" role="alert" {% endif %}>
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Гара[GE]</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item {% if request.resolver_match.url_name == 'orders_list_url' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'orders_list_url' %}">Заказы <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.url_name == 'clients_list_url' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'clients_list_url' %}">Клиенты</a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.url_name == 'contractors_list_url' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'contractors_list_url' %}">Поставщики</a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.url_name == '_list_url' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'contractors_list_url' %}">Настройки</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Статистика</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+      </form>
+    </div>
+  </nav>
+
+
+    {% block content %}
+    <h1>Not content</h1>
+    {% endblock content %}
+
+  <footer class="footer">
+    <div class="container">
+      <div class="text-center">
+        <span>Coded by <a href="#">Kirill Sobolev</a>, 2020</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  {% block scripts %}
+  <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/tablesort.min.js' %}"></script>
+  <script src="{% static 'assets/js/clipboard.min.js' %}"></script>
+  <!-- <script src="{% static 'assets/js/jquery.maskedinput.min.js' %}"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+  <!-- You can alternatively load the minified version -->
+  <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+  {% endblock scripts %}
+
+  {% block extrascripts %}{% endblock extrascripts %}
+</body>
+
+</html>
