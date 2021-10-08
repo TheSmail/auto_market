@@ -16,14 +16,22 @@ class Client(models.Model):
     e_mail = models.CharField(verbose_name="E-mail", max_length=100, blank=True)
     label = models.TextField(verbose_name="Метка", max_length=150, blank=True)
 
-    # def get_absolute_url(self):
-    #     return reverse('client_detail_url', kwargs={'pk': self.pk})
+    class Meta:
+        verbose_name = 'Клиент'
+        verbose_name_plural = 'Клиенты'
+
+    def get_absolute_url(self):
+        return reverse('client_detail_url', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.last_name
 
 class Contractor(models.Model):
     contractor_name = models.CharField(verbose_name='Название поставщика', max_length=50)
+
+    class Meta:
+        verbose_name = 'Поставщик'
+        verbose_name_plural = 'Поставщики'
 
     def __str__(self):
         return self.contractor_name
@@ -35,6 +43,10 @@ class Car(models.Model):
     year = models.CharField(verbose_name="Год", max_length=4, blank=True)
     vin = models.CharField(verbose_name="VIN", max_length=25, blank=True)
     hp = models.FloatField(verbose_name="Л/С", max_length=5, default=0)
+
+    class Meta:
+        verbose_name = 'Машина'
+        verbose_name_plural = 'Машины'
 
     def __str__(self):
         return self.makes
@@ -52,7 +64,11 @@ class Product(models.Model):
     contractor = models.ForeignKey('Contractor', null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Поставщик")
     status = models.CharField(verbose_name="Статус", max_length=1, choices=STATUS, default='A')
     price = models.DecimalField(verbose_name="Цена закупки", max_digits=10, decimal_places=2)
-    description = models.TextField(verbose_name="Описание", max_length=80)
+    description = models.TextField(verbose_name="Описание", max_length=80, blank=True)
+
+    class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
     def __str__(self):
         return self.product_name
@@ -69,12 +85,12 @@ class Order(models.Model):
     worker = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Сотрудник")
     note = models.CharField(verbose_name="Заметка", max_length=150, blank=True)
 
-    # def get_absolute_url(self):
-    #     return reverse('order_detail_url', kwargs={'pk': self.pk})
-
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+
+    def get_absolute_url(self):
+        return reverse('order_detail_url', kwargs={'pk': self.pk})
 
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())

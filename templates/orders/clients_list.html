@@ -29,7 +29,7 @@
         <th scope="col">#</th>
         <th scope="col" data-sort-default>ФИО</th>
         <th scope="col">Телефон</th>
-        <th scope="col">Долг</th>
+        <th scope="col">Метка</th>
         <th scope="col" data-sort-method='none'></th>
       </tr>
     </thead>
@@ -38,21 +38,21 @@
       <tr>
         <th scope="row">{{ client.id}}</th>
         <td>
-          <h6><a href="{{ client.get_absolute_url }}">{{ client.last_name }} {{ client.first_name }} {{ client.fath_name }}</a>
-            {% if client.label %}
-            <span class="badge badge-danger">{{ client.get_label_display }}</span>
-            {% endif %}
+          <h6><a href="{{ client.get_absolute_url }}">{{ client.last_name }} {{ client.first_name }} {{ client.patronymic }}</a>
+{#            {% if client.label %}#}
+{#            <span class="badge badge-danger">{{ client.get_label_display }}</span>#}
+{#            {% endif %}#}
           </h6>
         </td>
         <td>+{{ client.phone }}</td>
-        <td>{{ client.note_c }}</td>
+        <td>{{ client.label }}</td>
         <td>
-          <button type="button" class="update-client btn btn-sm btn-primary" data-id="{% url 'update_client' client.pk %}">
-            <span class="fa fa-pencil"></span>
-          </button>
-          <button type="button" class="delete-client btn btn-sm btn-danger" data-id="{% url 'delete_client' client.pk %}">
-            <span class="fa fa-trash"></span>
-          </button>
+{#          <button type="button" class="update-client btn btn-sm btn-primary" data-id="{% url 'update_client' client.pk %}">#}
+{#            <span class="fa fa-pencil"></span>#}
+{#          </button>#}
+{#          <button type="button" class="delete-client btn btn-sm btn-danger" data-id="{% url 'delete_client' client.pk %}">#}
+{#            <span class="fa fa-trash"></span>#}
+{#          </button>#}
         </td>
       </tr>
       {% endfor %}
@@ -61,47 +61,47 @@
 </div>
 
 {% block extrascripts %}
-<script type="text/javascript">
-  $(function() {
-
-    $(".create-client").modalForm({
-      formURL: "{% url 'create_client' %}",
-      modalID: "#create-modal"
-    });
-
-    // Update book buttons
-    $(".update-client").each(function() {
-      $(this).modalForm({
-        formURL: $(this).data('id')
-      });
-    });
-
-    // Delete book buttons
-    $(".delete-client").each(function() {
-      $(this).modalForm({
-        formURL: $(this).data('id')
-      });
-    })
-
-    // Hide message
-    $(".alert").fadeTo(2000, 500).slideUp(500, function() {
-      $(".alert").slideUp(500);
-    });
-
-  });
-
-  $(function() {
-    //2. Получить элемент, к которому необходимо добавить маску
-    $("#phone").mask("+7(999)999-99-99", {
-      placeholder: "99219"
-    });
-  });
-  // jQuery(function($) {
-  //    $("input[id=phone]").mask("+38(099) 99-99-999");
-  //  });
-
-  new Tablesort(document.getElementById('table'));
-</script>
+{#<script type="text/javascript">#}
+{#  $(function() {#}
+{##}
+{#    $(".create-client").modalForm({#}
+{#      formURL: "{% url 'create_client' %}",#}
+{#      modalID: "#create-modal"#}
+{#    });#}
+{##}
+{#    // Update book buttons#}
+{#    $(".update-client").each(function() {#}
+{#      $(this).modalForm({#}
+{#        formURL: $(this).data('id')#}
+{#      });#}
+{#    });#}
+{##}
+{#    // Delete book buttons#}
+{#    $(".delete-client").each(function() {#}
+{#      $(this).modalForm({#}
+{#        formURL: $(this).data('id')#}
+{#      });#}
+{#    })#}
+{##}
+{#    // Hide message#}
+{#    $(".alert").fadeTo(2000, 500).slideUp(500, function() {#}
+{#      $(".alert").slideUp(500);#}
+{#    });#}
+{##}
+{#  });#}
+{##}
+{#  $(function() {#}
+{#    //2. Получить элемент, к которому необходимо добавить маску#}
+{#    $("#phone").mask("+7(999)999-99-99", {#}
+{#      placeholder: "99219"#}
+{#    });#}
+{#  });#}
+{#  // jQuery(function($) {#}
+{#  //    $("input[id=phone]").mask("+38(099) 99-99-999");#}
+{#  //  });#}
+{##}
+{#  new Tablesort(document.getElementById('table'));#}
+{#</script>#}
 
 {% endblock extrascripts %}
 
