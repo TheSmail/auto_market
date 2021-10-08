@@ -1,4 +1,6 @@
 /config
+/logs
+
 .idea
 idea
 .DS_Store

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 
-class OrderItemInline(admin.TabularInline):
+class OrderItemInline(admin.StackedInline):
     model = OrderItem
     # raw_id_fields = ['product']
 

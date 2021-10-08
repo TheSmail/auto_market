@@ -1,197 +1,195 @@
 {% extends 'orders/base_orders.html' %}
 
 {% block title %}
-{{ client.last_name }} {{ client.first_name }} - {{block.super}}
+    {{ client.last_name }} {{ client.first_name }} - {{ block.super }}
 {% endblock %}
 
 {% block content %}
 
-{% include "orders/_modal.html" %}
-<div class="container">
-  <div class="row mt-5">
-    <div class="col-4">
-      <h2>{{ client.last_name }} <br>{{ client.first_name }} {{ client.fath_name }}</h2>
-      <h5><span class="badge badge-danger mb-2">{{ client.get_label_display }}</span></h5>
-      <h5><span class="badge badge-success mb-2">{{ client.order_set.date_create }}</span></h5>
-      <ul class="list-group mb-3">
-        <li class="list-group-item bg-light">
-          <h6>Основная информация</h6>
-        </li>
-        <li class="list-group-item"><i class="fa fa-phone"></i> +{{ client.phone }}</li>
-      </ul>
-      <ul class="list-group">
-        <li class="list-group-item bg-light">
-          <h6>Информация о заказах</h6>
-        </li>
-        <li class="list-group-item">
-          <div class="d-flex">
-            <div class="mr-auto">Всего заказов</div>
-            <div class="bd-highlight">
-              <span class="badge badge-success mr-0">Ошибка</span>
+    {% include "orders/_modal.html" %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-4">
+                <h2>{{ client.last_name }} <br>{{ client.first_name }} {{ client.patronymic }}</h2>
+                <h5><span class="badge badge-danger mb-2"></span></h5>
+                <h5><span class="badge badge-success mb-2">{{ client.order_set.date_create }}</span></h5>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item bg-light">
+                        <h6>Основная информация</h6>
+                    </li>
+                    <li class="list-group-item"><i class="fa fa-phone"></i> +{{ client.phone }}</li>
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item bg-light">
+                        <h6>Информация о заказах</h6>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex">
+                            <div class="mr-auto">Всего заказов</div>
+                            <div class="bd-highlight">
+                                <span class="badge badge-success mr-0">Ошибка</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex">
+                            <div class="mr-auto">Сумма заказов</div>
+                            <div class="bd-highlight">
+                                <span class="badge badge-success mr-0">Ошибка руб.</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex">
+                            <div class="mr-auto">Долг</div>
+                            <div class="bd-highlight">
+                                <span class="badge badge-danger mr-0">Ошибка руб.</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
-          </div>
-        </li>
-        <li class="list-group-item">
-          <div class="d-flex">
-            <div class="mr-auto">Сумма заказов</div>
-            <div class="bd-highlight">
-              <span class="badge badge-success mr-0">Ошибка руб.</span>
-            </div>
-          </div>
-        </li>
-        <li class="list-group-item">
-          <div class="d-flex">
-            <div class="mr-auto">Долг</div>
-            <div class="bd-highlight">
-              <span class="badge badge-danger mr-0">Ошибка руб.</span>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
 
 
-    <div class="col-8">
-      <div class="row mt-5 mb-2 ml-1">
-        <ul class="nav nav-tabs" id="pills-tab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="pills-order-tab" data-toggle="pill" href="#pills-order" role="tab" aria-controls="pills-order" aria-selected="true">Заказы</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="pills-car-tab" data-toggle="pill" href="#pills-car" role="tab" aria-controls="pills-car" aria-selected="false">Автомобили</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="pills-order-tab">
-          <div class="row">
             <div class="col-8">
-              <h3>Кол-во заказов:</h3>
-            </div>
-            <div class="col-4 text-right">
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Добавить</button>
-            </div>
-          </div>
-          {% if client.order_set.all %}
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr class="bg-light">
-                <th scope="col">#</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Менеджер</th>
-                <th scope="col">Сумма</th>
-                <th scope="col">Оплачено</th>
-                <th scope="col">Долг</th>
-                <th scope="col">Статус</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for order in client.order_set.all %}
-              <tr>
-                <th scope="row"><a href="{{ order.get_absolute_url }}">{{ order.id}}</a></th>
-                <td>{{ order.date_create|date:'d/m/Y' }} в {{ order.date_create|date:'H:i' }}</td>
-                <td>{{ order.worker }}</td>
-                <td>{{ order.summa }}</td>
-                <td>{{ order.deposit }}</td>
-                <td>{{ order.debt }}</td>
-                <td>
-                  <div class="dropdown">
-                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {{ order.get_status_display }}
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
+                <div class="row mt-5 mb-2 ml-1">
+                    <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-order-tab" data-toggle="pill" href="#pills-order"
+                               role="tab" aria-controls="pills-order" aria-selected="true">Заказы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-car-tab" data-toggle="pill" href="#pills-car" role="tab"
+                               aria-controls="pills-car" aria-selected="false">Автомобили</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-order" role="tabpanel"
+                         aria-labelledby="pills-order-tab">
+                        <div class="row">
+                            <div class="col-8">
+                                <h3>Кол-во заказов:</h3>
+                            </div>
+                            <div class="col-4 text-right">
+                                <button type="button" class="create-order btn btn-success" data-toggle="modal"
+                                        data-target="#exampleModal">Добавить
+                                </button>
+                            </div>
+                        </div>
+                        {% if client.order_set.all %}
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr class="bg-light">
+                                    <th scope="col">#</th>
+                                    <th scope="col">Дата создания</th>
+                                    <th scope="col">Менеджер</th>
+                                    <th scope="col">Сумма</th>
+                                    <th scope="col">Оплачено</th>
+                                    <th scope="col">Долг</th>
+                                    <th scope="col">Статус</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for order in client.order_set.all %}
+                                    <tr>
+                                        <th scope="row"><a href="{{ order.get_absolute_url }}">{{ order.id }}</a></th>
+                                        <td>{{ order.date_create|date:'d/m/Y' }}
+                                            в {{ order.date_create|date:'H:i' }}</td>
+                                        <td>{{ order.worker }}</td>
+                                        <td>{{ order.note }}</td>
+                                        <td>{{ order.note }}</td>
+                                        <td>{{ order.note }}</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                    {{ order.get_status_display }}
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="{{ order.get_absolute_url }}">
+                                                <button type="button" class="btn btn-sm btn-success fa fa-eye"></button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p class="lead text-center">Заказы отсутствуют</p>
+                        {% endif %}
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <a href="{{ order.get_absolute_url }}"><button type="button" class="btn btn-sm btn-success fa fa-eye"></button></a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          {% else %}
-          <p class="lead text-center">Заказы отсутствуют</p>
-          {% endif %}
+
+                    <div class="tab-pane fade" id="pills-car" role="tabpanel" aria-labelledby="pills-car-tab">
+                        <div class="row">
+                            <div class="col-8">
+                                <h3>Кол-во авто:</h3>
+                            </div>
+                            <div class="col-4 text-right">
+                                <button type="button" class="create-car btn btn-success" data-toggle="modal"
+                                        data-target="#exampleModal">Добавить
+                                </button>
+                            </div>
+                        </div>
+
+                        {% if client.car_set.all %}
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr class="bg-light">
+                                    <th scope="col">Марка модель - год</th>
+                                    <th scope="col">VIN или № кузова</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for car in client.car_set.all %}
+                                    <tr>
+                                        <td>{{ car.makes }} {{ car.model }} - {{ car.year }} г., {{ car.hp }} л.с.</td>
+                                        <td id="vin_{{ car.id }}">{{ car.vin }}
+                                            <button class="btn-clipboard btn btn-sm text-right"
+                                                    data-clipboard-target="#vin_{{ car.id }}">
+                                                <span class="fa fa-copy"></span>
+                                            </button>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p class="lead text-center">Нет ни одного автомобиля</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="tab-pane fade" id="pills-car" role="tabpanel" aria-labelledby="pills-car-tab">
-          <div class="row">
-            <div class="col-8">
-              <h3>Кол-во авто:</h3>
-            </div>
-            <div class="col-4 text-right">
-              <button type="button" class="create-car btn btn-success" data-toggle="modal" data-target="#exampleModal">Добавить</button>
-            </div>
-          </div>
+        {% block extrascripts %}
+            <script type="text/javascript">
+                $(function () {
 
-          {% if client.car_set.all %}
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr class="bg-light">
-                <th scope="col">Марка модель - год</th>
-                <th scope="col">VIN или № кузова</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for car in client.car_set.all %}
-              <tr>
-                <td>{{ car.makes }} {{ car.model }} - {{ car.year }} г., {{ car.hp }} л.с.</td>
-                <td id="vin_{{ car.id }}">{{ car.vin }}
-                  <button class="btn-clipboard btn btn-sm text-right" data-clipboard-target="#vin_{{ car.id }}">
-                      <span class="fa fa-copy"></span>
-                  </button>
-                </td>
-                <td></td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          {% else %}
-          <p class="lead text-center">Нет ни одного автомобиля</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
+                    $(".create-order").modalForm({
+                        formURL: "{% url 'create_order' %}",
+                        modalID: "#create-modal"
+                    });
+                    // Hide message
+                    $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                        $(".alert").slideUp(500);
+                    });
 
-  {% block extrascripts %}
-  <script type="text/javascript">
-    $(function() {
+                });
 
-      $(".create-car").modalForm({
-        formURL: "{% url 'create_car' %}",
-        modalID: "#create-modal"
-      });
+                new ClipboardJS('.btn-clipboard');
+            </script>
+        {% endblock extrascripts %}
 
-      // Update book buttons
-      $(".update-client").each(function() {
-        $(this).modalForm({
-          formURL: $(this).data('id')
-        });
-      });
-
-      // Delete book buttons
-      $(".delete-client").each(function() {
-        $(this).modalForm({
-          formURL: $(this).data('id')
-        });
-      })
-
-      // Hide message
-      $(".alert").fadeTo(2000, 500).slideUp(500, function() {
-        $(".alert").slideUp(500);
-      });
-
-    });
-
-    new ClipboardJS('.btn-clipboard');
-  </script>
-  {% endblock extrascripts %}
-
-  {% endblock %}
+{% endblock %}
